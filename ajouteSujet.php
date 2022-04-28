@@ -3,6 +3,7 @@
 require('connexion.php');
 
 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +35,7 @@ require('connexion.php');
 </nav>
 <!-- navbar  -->
 
-<form class="row g-3 mx-5 my-5">
+<form class="row g-3 mx-5 my-5" method="POST">
     <h2>Publier un sujet : </h2>
 <div>
     <label for="">Titre de sujet :</label>
@@ -44,10 +45,43 @@ require('connexion.php');
     <label for="">Contenu du sujet :</label>
   <textarea class="form-control" name="contenu"></textarea>
   </div>
+  
   <div class="col-auto">
-    <button type="submit" class="btn btn-primary mb-3">Publier le sujet</button>
+    <button type="submit" class="btn btn-primary mb-3" name="envoyer">Publier le sujet</button>
   </div>
 </form>
 
 </body>
 </html>
+<?php 
+ 
+if (empty($_POST['envoyer']) && isset($_POST['titre']) && isset($_POST['contenu']) ){
+    $titre=$_POST['titre'];
+    $contenu=$_POST['contenu'];
+    $heure = date("H:i:s");
+    $date = date("Y-m-d");
+        
+    try {
+
+
+        $sql = "INSERT INTO `sujet` (`id_sujet`, `id_util`, `titre_sujet`, `sujet_contenu`, `date_sujet`, `heure_sujet`) VALUES 
+        (NULL, NULL, '$titre', '$contenu', '$date', '$heure')"; 
+        $bdd->exec($sql);
+        echo "publication de sujet avec succés !";
+        header("location:index.php");
+        
+       
+        
+    }
+        
+    catch(PDOException $e){
+            echo $sql . "<br>" . $e->getMessage();
+    }
+  
+    
+} 
+
+ $bdd=null; 
+ 
+
+?>
